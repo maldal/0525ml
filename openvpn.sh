@@ -7,7 +7,7 @@ myip=`wget -O - http://ipecho.net/plain`
 cd /etc/openvpn/
 
 
-#wget http://www.openml.club/easy-rsa.tar.gz
+wget http://www.openml.club/easy-rsa.tar.gz
 
 echo '开始下载项目'
 git clone https://github.com/2422494482/mproxy.git
@@ -107,7 +107,7 @@ echo "配置文件制作完毕"
 echo "正在创建下载链接：" echo '=========================================================================='
 echo ''
 echo "上传文件："
-#curl --upload-file ./ovpn.ovpn https://transfer.sh/openvpn.ovpn
+curl --upload-file ./ovpn.ovpn https://transfer.sh/openvpn.ovpn
 echo ''
 echo "上传成功"
 echo "请复制“https://transfer.sh/..”链接到浏览器OpenVPN成品配置文件"
