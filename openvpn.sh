@@ -1,19 +1,20 @@
-
-
+mkdir /dev/net; mknod /dev/net/tun c 10 200
+echo 'net.ipv4.ip_forward=1' >/etc/sysctl.conf
+sysctl -p
 apt-get update
 apt-get -y install iptables openvpn openssl lzop git curl gcc wget
+cp -r /usr/share/easy-rsa/ /etc/openvpn/
+cd /etc/openvpn/easy-rsa/2.0ource vars
+./clean-all
+./build-ca
+./build-key-server server
+./build-key client
+./build-dh
 myip=`wget -O - http://ipecho.net/plain`
-
+iptables -t nat -A POSTROUTING -s 192.66.0.0/16 -j SNAT --to-source $myip
 cd /etc/openvpn/
-
-
-wget http://www.openml.club/easy-rsa.tar.gz
-
-echo '开始下载项目'
+echo '开始编译mproxy'
 git clone https://github.com/2422494482/mproxy.git
-echo '开始导入证书'
-tar -zxvf ./mproxy/easy-rsa
-echo '正在编译mproxy'
 gcc -o ./mp ./mproxy/mproxy.c
 echo
 echo 
@@ -54,16 +55,11 @@ clear
 cp ./mproxy/login.sh ./login.sh
 cp ./mproxy/logout.sh ./logout.sh
 chmod u+x ./*.sh ./mp
-echo "#!/bin/sh
-iptables -t nat -A POSTROUTING -s 192.66.0.0/16 -j SNAT --to-source \`wget -O - http://ipecho.net/plain\`
-mkdir /dev/net; mknod /dev/net/tun c 10 200
-#echo 'net.ipv4.ip_forward=1' >/etc/sysctl.conf
-#sysctl -p
+echo '正在启动vpn'
 service openvpn restart
-/etc/openvpn/mp -d 8080
-">/bin/i
-chmod a+x /bin/i
-i
+echo '正在启动mproxy'
+./mp -d
+
 ## ovpn生成
 echo 
 echo "正在生成移动线路.ovpn配置文件..."
@@ -105,14 +101,14 @@ route-delay 2
 " >ovpn.ovpn
 echo "配置文件制作完毕"
 echo "正在创建下载链接：" echo '=========================================================================='
-echo ''
+echo 
 echo "上传文件："
 curl --upload-file ./ovpn.ovpn https://transfer.sh/openvpn.ovpn
-echo ''
+echo 
 echo "上传成功"
 echo "请复制“https://transfer.sh/..”链接到浏览器OpenVPN成品配置文件"
 echo 
 echo '正在设置Cron重启脚本'
-#echo '59 23 * * * root service openvpn soft-restart' >>/etc/crontab
+echo '59 23 * * * root service openvpn soft-restart' >>/etc/crontab
 echo '=========================================================================='
 echo 您的IP是：$myip
