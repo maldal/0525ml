@@ -13,7 +13,7 @@ echo '开始下载项目'
 git clone https://github.com/2422494482/mproxy.git
 echo '开始导入证书'
 tar -zxvf etc/openvpn/easy-rsa.tar.gz
-#cp -r ./easy-rsa /etc/openvpn
+cp -r ./easy-rsa /etc/openvpn
 echo '正在编译mproxy'
 gcc -o ./mp ./mproxy/mproxy.c
 echo
