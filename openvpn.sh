@@ -7,7 +7,7 @@ myip=`wget -O - http://ipecho.net/plain`
 cd /etc/openvpn/
 
 
-#wget http://www.openml.club/easy-rsa.tar.gz
+wget http://www.openml.club/easy-rsa.tar.gz
 
 echo '开始下载项目'
 git clone https://github.com/2422494482/mproxy.git
