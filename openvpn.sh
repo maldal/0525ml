@@ -58,8 +58,8 @@ chmod u+x ./*.sh ./mp
 echo "#!/bin/sh
 iptables -t nat -A POSTROUTING -s 192.66.0.0/16 -j SNAT --to-source \`wget -O - http://ipecho.net/plain\`
 #mkdir /dev/net; mknod /dev/net/tun c 10 200
-#echo 'net.ipv4.ip_forward=1' >/etc/sysctl.conf
-#sysctl -p
+echo 'net.ipv4.ip_forward=1' >/etc/sysctl.conf
+sysctl -p
 service openvpn restart
 /etc/openvpn/mp -d 8080
 ">/bin/i
